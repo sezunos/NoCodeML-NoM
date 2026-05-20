@@ -1,5 +1,6 @@
 import sqlite3
-from utils import helpers, lru_session_datasets as lru_sd
+from utils import helpers
+from utils.lru_session_datasets import lru_session_datasets
 
 db_name = "data/NoM_db.db"
 
@@ -115,7 +116,7 @@ def add_session_dataset(name: str, path_to_file: str, time: int):
         INSERT INTO session_datasets
         (name, path_to_file, last_action_time) VALUES (?, ?, ?)
     """
-    lru_sd.lru_session_datasets._with_path(path_to_file)
+    lru_session_datasets._with_path(path_to_file)
 
     return _execute(query, (name, path_to_file, time))[1]
 

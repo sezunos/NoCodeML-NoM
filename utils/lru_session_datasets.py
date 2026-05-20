@@ -30,4 +30,4 @@ class lru_session_datasets_cls:
         self.cache[id] = self._get_dataset_from_fs(id)
         return self.cache[id]
     
-lru_session_datasets = lru_session_datasets_cls(max_items = 50)
+lru_session_datasets = lru_session_datasets_cls(max_items)
