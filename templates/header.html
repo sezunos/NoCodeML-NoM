@@ -1,7 +1,7 @@
 <header>
     <nav>
         <button id="upload" hx-post="/navigator"><img src="{{url_for('static', filename='img/upload.png')}}"> Upload Data</button>
-        <button id="change" hx-post="/navigator"><img src="{{url_for('static', filename='img/change.png')}}"> Change Data</button>
+        <button id="edit" hx-post="/navigator"><img src="{{url_for('static', filename='img/edit.png')}}"> Edit Data</button>
         <button id="analysis" hx-post="/navigator"><img src="{{url_for('static', filename='img/analysis.png')}}"> Data Analysis</button>
         <button id="train" hx-post="/navigator"><img src="{{url_for('static', filename='img/train.png')}}"> Train Model</button>
         <button id="account" hx-post="/navigator"><img src="{{url_for('static', filename= 'avatars/' + username + '.png')}}"> {{username}}</button>

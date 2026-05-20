@@ -8,6 +8,10 @@ class lru_session_datasets_cls:
     def __init__(self, max_items: int):
         self.max_items = max_items
         self.cache = OrderedDict()
+
+    def _clear_cache(self, ids: list | tuple):
+        for id in ids:
+            self.cache.pop(id, None)
     
     def _get_dataset_from_fs(self, id: int):
         with open(db.get_session_dataset_data(id)[2], 'r') as file:

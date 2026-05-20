@@ -29,7 +29,6 @@ def upload_page():
         path_to_file = os.path.join(path_to_dir, full_filename)
         file.save(path_to_file)
         db.add_session_dataset(full_filename, path_to_file, time.time())
-        print(db._execute("SELECT * FROM session_datasets")[0])
         return "Данные успешно загружены"
 
     return render_template("upload.html", username=session["username"])
