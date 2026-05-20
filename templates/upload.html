@@ -9,10 +9,10 @@
         {% include "header.html" %}
 
         <main>
-            <form enctype="multipart/form-data">
+            <form>
                 <p>
                     <label for="file">Загрузить данные <br>(формат .csv)<br></label>
-                    <input type="file" name="file" id="file" required hx-post="/upload" hx-target="#error-message" hx-trigger="change">
+                    <input type="file" name="file" id="file" required hx-post="/upload" hx-trigger="change" hx-encoding="multipart/form-data" hx-target="#error-message">
                 </p>
                 <p id="error-message"></p>
             </form>

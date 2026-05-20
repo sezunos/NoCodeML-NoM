@@ -1,5 +1,5 @@
 import sqlite3
-from utils import helpers
+from utils import helpers, lru_session_datasets as lru_sd
 
 db_name = "data/NoM_db.db"
 
@@ -68,7 +68,7 @@ def init_all():
     init_session_datasets()
     init_models()
 
-@helpers.get_data_control
+@helpers.return_data_control
 def get_user_data(username: str):
     query = """
         SELECT *
@@ -85,7 +85,7 @@ def add_user(username: str, password_hash: bytes):
     """
     return _execute(query, (username, password_hash))[1]
 
-@helpers.get_data_control
+@helpers.return_data_control
 def get_linked_dataset_data(id: int):
     query = """
         SELECT *
@@ -101,7 +101,7 @@ def add_linked_dataset(name: str, path_to_file: str):
     """
     return _execute(query, (name, path_to_file))[1]
 
-@helpers.get_data_control
+@helpers.return_data_control
 def get_session_dataset_data(id: int):
     query = """
         SELECT *
@@ -115,9 +115,11 @@ def add_session_dataset(name: str, path_to_file: str, time: int):
         INSERT INTO session_datasets
         (name, path_to_file, last_action_time) VALUES (?, ?, ?)
     """
+    lru_sd.lru_session_datasets._with_path(path_to_file)
+
     return _execute(query, (name, path_to_file, time))[1]
 
-@helpers.get_data_control
+@helpers.return_data_control
 def get_model_data(id: int):
     query = """
         SELECT *
