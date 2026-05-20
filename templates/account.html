@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NoM: {{username}}'s account</title>
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+
+    <body>
+        {% include "header.html" %}
+
+        <main>
+            <img src="{{url_for('static', filename = 'avatars/' + username + '.png')}}">
+            {{username}}
+            <hr>
+            <p>
+                количество моделей - {{models_count}}
+            </p>
+
+            <p>
+                {{ models_table_html | safe}}
+            </p>
+        </main>
+    </body>
+</html>
