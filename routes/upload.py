@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, request
-from utils import helpers
+from utils import helpers, df_utils
 from werkzeug.utils import secure_filename
 import magic
 import os
@@ -27,8 +27,20 @@ def upload_page():
         random_prefix = os.urandom(5).hex()
         full_filename = random_prefix + filename
         path_to_file = os.path.join(path_to_dir, full_filename)
-        file.save(path_to_file)
-        db.add_session_dataset(full_filename, path_to_file, time.time())
-        return "Данные успешно загружены"
 
-    return render_template("upload.html", username=session["username"])
+        file.save(path_to_file)
+        session_dataset_id = db.add_session_dataset(full_filename, path_to_file, time.time())
+
+        session["session_dataset_id"] = session_dataset_id
+
+        return helpers.htmx_redirect("/upload")
+
+    min_idxs = 5
+    max_idxs = 10
+    df_html = ''
+    session_dataset_id = session.get("session_dataset_id", None)
+    print(session_dataset_id)
+    if session_dataset_id is not None:
+        df_html = df_utils.get_correct_df_html(session_dataset_id, min_idxs, max_idxs)
+
+    return render_template("upload.html", username=session["username"], df_html= "<p>Current Dataset</p>" + df_html)

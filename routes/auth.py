@@ -30,8 +30,8 @@ def check_password(candidate_password: str, hash_from_db: bytes):
 
     return compare_digest(hashed_password, hashed_candidate_password)
 
-def set_session(id: int, username: str):
-    session["id"] = id
+def set_session(user_id: int, username: str):
+    session["user_id"] = user_id
     session["username"] = username
 
 #-------ROUTES-------

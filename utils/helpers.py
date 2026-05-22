@@ -14,13 +14,3 @@ def session_required(func):
         
         return func(*args, **kwargs)
     return wrapper
-
-def return_data_control(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)[0]
-
-        if not result:
-            return None
-        return result[0]
-    return wrapper

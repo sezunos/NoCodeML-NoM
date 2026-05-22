@@ -8,18 +8,18 @@ def garbage_datasets_collector(kill_time: float, sleep_time: float):
     while True:
         threshold = time.time() - kill_time
         get_candidates_query = """
-            SELECT path_to_file, id
+            SELECT id, path_to_file
             FROM session_datasets
             WHERE last_action_time <= (?)
         """
         candidates = db._execute(get_candidates_query, (threshold,))[0]
 
-        lru_session_datasets._clear_cache([candidate[1] for candidate in candidates])
+        lru_session_datasets._clear_cache([candidate[0] for candidate in candidates])
 
         deleted_paths = []
         for candidate in candidates:
-            os.remove(candidate[0])
-            deleted_paths.append(candidate[0])
+            os.remove(candidate[1])
+            deleted_paths.append(candidate[1])
 
         delete_query = f"""
             DELETE

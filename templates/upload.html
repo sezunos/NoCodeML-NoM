@@ -12,9 +12,9 @@
             <form>
                 <p>
                     <label for="file">Загрузить данные <br>(формат .csv)<br></label>
-                    <input type="file" name="file" id="file" required hx-post="/upload" hx-trigger="change" hx-encoding="multipart/form-data" hx-target="#error-message">
+                    <input type="file" name="file" id="file" required hx-post="/upload" hx-trigger="change" hx-encoding="multipart/form-data" hx-swap="" hx-target="#error-message">
                 </p>
-                <p id="error-message"></p>
+                <p id="error-message"> {{ df_html | safe}} </p>
             </form>
         </main>
     </body>

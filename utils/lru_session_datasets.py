@@ -1,4 +1,5 @@
 from db import db
+import pandas as pd
 from collections import OrderedDict
 
 
@@ -9,29 +10,33 @@ class lru_session_datasets_cls:
         self.max_items = max_items
         self.cache = OrderedDict()
 
-    def _clear_cache(self, ids: list | tuple):
-        for id in ids:
-            self.cache.pop(id, None)
+    def _clear_cache(self, dataset_ids: list | tuple):
+        for dataset_id in dataset_ids:
+            self.cache.pop(dataset_id, None)
     
-    def _get_dataset_from_fs(self, id: int):
-        with open(db.get_session_dataset_data(id)[2], 'r') as file:
-            dataset = file.read()
-        return dataset
+    def _get_dataset_from_fs(self, dataset_id: int):
+        data = db.get_session_dataset_data(dataset_id)
+        path_to_file = data[2]
+        return pd.read_csv(path_to_file)
     
-    def _with_path(self, path_to_file: str):
-        with open(path_to_file, 'r') as file:
-            dataset = file.read()
-        return dataset
+    def _when_create(self, dataset_id, path_to_file: str):
+        dataset = pd.read_csv(path_to_file)
 
-    def get_dataset(self, id: int):
-        if id in self.cache:
-            self.cache.move_to_end(id, last=True)
-            return self.cache[id]
+        if len(self.cache) >= self.max_items:
+            self.cache.popitem(last=False)
+        
+        self.cache[dataset_id] = dataset
+        return self.cache[dataset_id]
+
+    def get_dataset(self, dataset_id: int):
+        if dataset_id in self.cache:
+            self.cache.move_to_end(dataset_id, last=True)
+            return self.cache[dataset_id]
         
         if len(self.cache) >= self.max_items:
             self.cache.popitem(last=False)
         
-        self.cache[id] = self._get_dataset_from_fs(id)
-        return self.cache[id]
+        self.cache[dataset_id] = self._get_dataset_from_fs(dataset_id)
+        return self.cache[dataset_id]
     
 lru_session_datasets = lru_session_datasets_cls(max_items)

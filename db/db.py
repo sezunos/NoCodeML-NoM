@@ -1,8 +1,7 @@
 import sqlite3
-from utils import helpers
 from utils.lru_session_datasets import lru_session_datasets
 
-db_name = "data/NoM_db.db"
+db_name = r"data/NoM_db.db"
 
 def _execute(query: str, data: tuple=()):
     with sqlite3.connect(db_name, timeout=30.0) as conn:
@@ -11,7 +10,10 @@ def _execute(query: str, data: tuple=()):
         curs.execute("""PRAGMA journal_mode=WAL""")
 
         curs.execute(query, data)
-        return (curs.fetchall(), curs.lastrowid)
+        fetchall = curs.fetchall()
+        lastrowid = curs.lastrowid
+
+        return (fetchall, lastrowid)
 
 def init_users():
     query = """
@@ -69,69 +71,79 @@ def init_all():
     init_session_datasets()
     init_models()
 
-@helpers.return_data_control
 def get_user_data(username: str):
     query = """
         SELECT *
         FROM users
         WHERE username = (?)
     """
+    fetchall, lastrowid = _execute(query, (username,))
 
-    return _execute(query, (username,))
+    return fetchall[0] if fetchall else None
 
 def add_user(username: str, password_hash: bytes):
     query = """
         INSERT INTO users
         (username, password_hash) VALUES (?, ?)
     """
-    return _execute(query, (username, password_hash))[1]
+    fetchall, lastrowid = _execute(query, (username, password_hash))
 
-@helpers.return_data_control
-def get_linked_dataset_data(id: int):
+    return lastrowid
+
+def get_linked_dataset_data(dataset_id: int):
     query = """
         SELECT *
         FROM linked_datasets
         WHERE id = (?)
     """
-    return _execute(query, (id,))
+    fetchall, lastrowid = _execute(query, (dataset_id,))
+
+    return fetchall[0] if fetchall else None
 
 def add_linked_dataset(name: str, path_to_file: str):
     query = """
         INSERT INTO linked_datasets
         (name, path_to_file) VALUES (?, ?)
     """
-    return _execute(query, (name, path_to_file))[1]
+    fetchall, lastrowid = _execute(query, (name, path_to_file))
 
-@helpers.return_data_control
-def get_session_dataset_data(id: int):
+    return lastrowid
+
+def get_session_dataset_data(dataset_id: int):
     query = """
         SELECT *
         FROM session_datasets
         WHERE id = (?)
     """
-    return _execute(query, (id,))
+    fetchall, lastrowid = _execute(query, (dataset_id,))
+
+    return fetchall[0] if fetchall else None
 
 def add_session_dataset(name: str, path_to_file: str, time: int):
     query = """
         INSERT INTO session_datasets
         (name, path_to_file, last_action_time) VALUES (?, ?, ?)
     """
-    lru_session_datasets._with_path(path_to_file)
+    fetchall, lastrowid = _execute(query, (name, path_to_file, time))
+    lru_session_datasets._when_create(lastrowid, path_to_file)
 
-    return _execute(query, (name, path_to_file, time))[1]
+    return lastrowid
 
-@helpers.return_data_control
-def get_model_data(id: int):
+def get_model_data(model_id: int):
     query = """
         SELECT *
         FROM models
         WHERE id = (?)
     """
-    return _execute(query, (id,))
+    fetchall, lastrowid = _execute(query, (model_id,))
+
+    return fetchall[0] if fetchall else None
 
 def add_model(name: str, path_to_file: str, user_id: int, model_type: str, train_date: int, description: str, dataset_id: int):
     query = """
         INSERT INTO models
         (name, path_to_file, user_id, model_type, train_date, description, dataset_id) VALUES (?, ?, ?, ?, ?, ?, ?)
     """
-    return _execute(query, (name, path_to_file, user_id, model_type, train_date, description, dataset_id))[1]
+    fetchall, lastrowid = _execute(query, (name, path_to_file, user_id, model_type, train_date, description, dataset_id))
+
+    return lastrowid
