@@ -16,6 +16,9 @@ class lru_session_datasets_cls:
     
     def _get_dataset_from_fs(self, dataset_id: int):
         data = db.get_session_dataset_data(dataset_id)
+        if data is None:
+            return data
+
         path_to_file = data[2]
         return pd.read_csv(path_to_file)
     
@@ -33,10 +36,14 @@ class lru_session_datasets_cls:
             self.cache.move_to_end(dataset_id, last=True)
             return self.cache[dataset_id]
         
+        session_dataset = self._get_dataset_from_fs(dataset_id)
+        if session_dataset is None:
+            return session_dataset
+
         if len(self.cache) >= self.max_items:
             self.cache.popitem(last=False)
-        
-        self.cache[dataset_id] = self._get_dataset_from_fs(dataset_id)
+
+        self.cache[dataset_id] = session_dataset
         return self.cache[dataset_id]
     
 lru_session_datasets = lru_session_datasets_cls(max_items)

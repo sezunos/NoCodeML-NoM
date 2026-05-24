@@ -1,0 +1,9 @@
+<p>
+    <label for="hue_select">Выберите столбец для группировки по цвету (необязательно)</label>
+    <select name="hue" id="hue_select">
+        <option value="">Выберите колонку</option>
+        {% for col_name in cols %}
+            <option value="{{col_name}}">{{col_name}}</option>
+        {% endfor %}
+    </select>
+</p>

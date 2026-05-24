@@ -35,12 +35,6 @@ def upload_page():
 
         return helpers.htmx_redirect("/upload")
 
-    min_idxs = 5
-    max_idxs = 10
-    df_html = ''
-    session_dataset_id = session.get("session_dataset_id", None)
-    print(session_dataset_id)
-    if session_dataset_id is not None:
-        df_html = df_utils.get_correct_df_html(session_dataset_id, min_idxs, max_idxs)
+    df_html = df_utils.show_session_df_html()
 
-    return render_template("upload.html", username=session["username"], df_html= "<p>Current Dataset</p>" + df_html)
+    return render_template("upload.html", username=session["username"], df_html=df_html)

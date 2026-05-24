@@ -6,7 +6,7 @@ from utils import navigator
 
 
 app = Flask(__name__)
-app.secret_key = "bbb"
+app.secret_key = "abcefe"
 htmx = HTMX(app)
 
 app.register_blueprint(auth.auth_bp)

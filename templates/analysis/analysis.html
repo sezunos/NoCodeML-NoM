@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NoM: Analysis Data</title>
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+
+    <body>
+        {% include "header.html" %}
+
+        <main>
+            <form>
+                <p>
+                    <button id="linear" hx-post="/analysis" hx-target="#args">Линейная диаграмма</button>
+                    <button id="bar" hx-post="/analysis" hx-target="#args">Столбчатая диаграмма</button>
+                    <button id="scatter" hx-post="/analysis" hx-target="#args">Диаграмма рассеяния</button>
+                </p>
+
+                <p>
+                    <button id="hist" hx-post="/analysis" hx-target="#args">Гистограмма</button>
+                    <button id="box" hx-post="/analysis" hx-target="#args">Диаграмма размаха</button>
+                    <button id="heat" hx-post="/analysis" hx-target="#args">Тепловая диаграмма</button>
+                </p>
+            </form>
+
+            <div id="args"></div>
+
+            {{ df_html | safe }}
+        </main>
+    </body>
+</html>

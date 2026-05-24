@@ -1,0 +1,9 @@
+<p>
+    <label for="Y_select">Выберите столбец для оси Y</label>
+    <select name="y" id="Y_select" required>
+        <option value="">Выберите колонку</option>
+        {% for col_name in cols %}
+            <option value="{{col_name}}">{{col_name}}</option>
+        {% endfor %}
+    </select>
+</p>

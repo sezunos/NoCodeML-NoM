@@ -54,7 +54,7 @@ def auth_page():
         set_session(data[0], data[1])
         return helpers.htmx_redirect("/account")
 
-    return render_template("auth.html")
+    return render_template("auth/auth.html")
 
 @auth_bp.route("/registration", methods=["get", "post"])
 def registration_page():
@@ -71,4 +71,4 @@ def registration_page():
         set_session(lastrowid, username)
         return helpers.htmx_redirect("/account")
 
-    return render_template("registration.html")
+    return render_template("auth/registration.html")

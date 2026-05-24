@@ -13,8 +13,9 @@ def garbage_datasets_collector(kill_time: float, sleep_time: float):
             WHERE last_action_time <= (?)
         """
         candidates = db._execute(get_candidates_query, (threshold,))[0]
+        candidates_ids = [candidate[0] for candidate in candidates]
 
-        lru_session_datasets._clear_cache([candidate[0] for candidate in candidates])
+        lru_session_datasets._clear_cache(candidates_ids)
 
         deleted_paths = []
         for candidate in candidates:
