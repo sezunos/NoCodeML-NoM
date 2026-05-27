@@ -36,5 +36,4 @@ def upload_page():
         return helpers.htmx_redirect("/upload")
 
     df_html = df_utils.show_session_df_html()
-
     return render_template("upload.html", username=session["username"], df_html=df_html)

@@ -1,0 +1,14 @@
+<form>
+    <p>
+        <label for="dc_name">Выберите столбец для удаления</label>
+        <select id="dc_name" name="col" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <button hx-post="/edit/{{action_type}}" hx-target="#message">Удалить столбец</button>
+    </p>
+
+    <p id="message"></p>
+</form>

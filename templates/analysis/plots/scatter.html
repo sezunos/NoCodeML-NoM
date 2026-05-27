@@ -1,0 +1,19 @@
+<form>
+    {% include "analysis/plots/standard plot params/request X param.html" %}
+    {% include "analysis/plots/standard plot params/request Y param.html" %}
+    {% include "analysis/plots/standard plot params/request hue param.html" %}
+
+    <p>
+        <label for="size_select">Выберите столбец для группировки по размеру (необязательно)</label>
+        <select name="size" id="size_select">
+            <option value=""></option>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <button hx-post="/analysis/plots/{{plot_type}}" hx-target="#plot-place">Построить график</button>
+    </p>
+
+    <p id="plot-place"></p>
+</form>

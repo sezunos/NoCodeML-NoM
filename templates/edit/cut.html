@@ -1,0 +1,39 @@
+<form>
+    <p>
+        <label for="col_select">Выберите столбец для наложения маски</label>
+        <select id="col_select" name="col" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <label for="na_work_select">Введите минимум интервала(включительно)</label>
+        <input type="text" name="min">
+    </p>
+
+    <p>
+        <label for="na_work_select">Введите максимум интервала(включительно)</label>
+        <input type="text" name="max">
+    </p>
+
+    <p>
+        <label for="where">Удалить значения</label>
+        <select id="where" name="where">
+            <option value="inner">внутри</option>
+            <option value="outer">вне</option>
+        </select>
+        <label for="where">интервала</label>
+    </p>
+
+    <p>
+        <button hx-post="/edit/cut_add_bad" hx-target="#new_bad" hx-swap='beforeend'>Добавить поле с элементом для удаления</button>
+        <button hx-post="/edit/cut_del_bads" hx-target="#new_bad">Удалить поля с элементами для удаления</button>
+        <div id="new_bad"></div>
+    </p>
+
+    <p>
+        <button hx-post="/edit/{{action_type}}" hx-target="#message">Обрезать данные</button>
+    </p>
+
+    <p id="message"></p>
+</form>

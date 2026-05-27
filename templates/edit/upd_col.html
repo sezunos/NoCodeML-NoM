@@ -1,0 +1,27 @@
+<form>
+    <p>
+        <label for="uc_name">Выберите столбец для изменения</label>
+        <select id="uc_name" name="col" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <label for="elwisefunc_name">Выберите операцию</label>
+        <select id="elwisefunc_name" name="elwisefunc_name" required>
+            <option value="round">стандартное округление</option>
+            <option value="ceil">округление вверх</option>
+            <option value="floor">округление вниз</option>
+            <option value="abs">модуль</option>
+            <option value="sqrt">квадратный корень</option>
+            <option value="cos">косинус</option>
+            <option value="sin">синус</option>
+        </select>
+    </p>
+
+    <p>
+        <button hx-post="/edit/{{action_type}}" hx-target="#message">Изменить столбец</button>
+    </p>
+
+    <p id="message"></p>
+</form>

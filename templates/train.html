@@ -9,7 +9,51 @@
         {% include "header.html" %}
 
         <main>
-            Train page
+            <form>
+                <p>
+                    <label for="model_name">Введите название модели</label>
+                    <input type="text" name="model_name" id="model_name">
+                </p>
+
+                <p>
+                    <label for="target_col">Выберите целевой столбец</label>
+                    <select name="target_col" id="target_col">
+                        {% include "cols options.html" %}
+                    </select>
+                </p>
+
+                <p>
+                    <label for="text_work">Выберите способ обработки текстовых данных</label>
+                    <select name="text_work" id="text_work">
+                        <option value="auto">Автоматически</option>
+                        <option value="OHE">OneHotEncoder</option>
+                        <option value="CntVec">CountVectorizer</option>
+                        <option value="TFDV">TfidfVectorizer</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="scaler">Выберите способ масштабирования данных</label>
+                    <select name="scaler" id="scaler">
+                        <option value="auto">Автоматически</option>
+                        <option value="Standard">Standard</option>
+                        <option value="MinMax">MinMax</option>
+                        <option value="Robust">Robust</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="model_type">Выберите тип модели</label>
+                    <select name="model_type" id="model_type">
+                        <option value="LinReg">Линейная регрессия</option>
+                        <option value="LogReg">Лоистическая регрессия</option>
+                        <option value="RandFor">Случайный лес</option>
+                        <option value="LGMB">Градиентный бустинг</option>
+                    </select>
+                </p>
+            </form>
+            
+            {{ df_html | safe }}
         </main>
     </body>
 </html>

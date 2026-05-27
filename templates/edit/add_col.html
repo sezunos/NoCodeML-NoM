@@ -1,0 +1,36 @@
+<form>
+    <p>
+        <label for="nc_name">Введите название нового столбца</label>
+        <input id="nc_name" name="name" type="text" required>
+    </p>
+
+    <p>
+        <label for="col1">Выберите столбец №1</label>
+        <select id="col1" name="col1" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <label for="elwisefunc_name">Выберите операцию</label>
+        <select id="elwisefunc_name" name="elwisefunc_name" required>
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+    </p>
+    
+    <p>
+        <label for="col2">Выберите столбец №2</label>
+        <select id="col2" name="col2" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <button hx-post="/edit/{{action_type}}" hx-target="#message">Создать столбец</button>
+    </p>
+
+    <p id="message"></p>
+</form>

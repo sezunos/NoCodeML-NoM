@@ -1,0 +1,23 @@
+<form>
+    <p>
+        <label for="col_select">Выберите столбец для просмотра пропусков</label>
+        <select id="col_select" name="col" required>
+            {% include "cols options.html" %}
+        </select>
+    </p>
+
+    <p>
+        <label for="na_work_select">Выберите действие для пропусков</label>
+        <select id="na_work_select" name="action_type" required>
+            <option value="drop">Удалить строки с пропуском</option>
+            <option value="mean">Заполнить средним</option>
+            <option value="median">Заполнить медианой</option>
+            <option value="ffill">Заполнить предыдущим значением</option>
+            <option value="bfill">Заполнить следующим значением</option>
+        </select>
+    </p>
+
+    <p>
+        <button hx-post="/edit/{{action_type}}" hx-target="#message">Изменить пропуски</button>
+    </p>
+</form>

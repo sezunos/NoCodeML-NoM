@@ -5,13 +5,15 @@ import seaborn as sns
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib.figure import Figure
-import mpld3
+import matplotlib.pyplot as plt
+import io
+import base64
 
 analysis_bp = Blueprint("analysis", __name__)
 
-no_dataset_message = "Сначала нужно загрузить таблицу"
+no_dataset_message = "Сначала нужно загрузить датасет"
 
-@analysis_bp.route("/analysis/<string:plot_type>", methods=["POST", "GET"])
+@analysis_bp.route("/analysis/plots/<string:plot_type>", methods=["POST", "GET"])
 @helpers.session_required
 def analysis_create_plot(plot_type):
     fig = Figure(figsize=(10, 6))
@@ -32,30 +34,32 @@ def analysis_create_plot(plot_type):
         return no_dataset_message
         
     params = {key: (value if value else None) for key, value in request.form.to_dict().items()}
+    if plot_type == "heat":
+        params["annot"] = True
+        params["fmt"] = ".2f"
+        params["cmap"] = "coolwarm"
+        params["center"] = 0
+    plot_dataset = session_dataset.corr(numeric_only=True) if plot_type == "heat" else session_dataset
 
     try:
-        plot_types[plot_type](data=session_dataset, ax=ax, **params)
-        html_graph = mpld3.fig_to_html(fig)
+        plot_types[plot_type](data=plot_dataset, ax=ax, **params)
+        with io.BytesIO() as buffer:
+            fig.savefig(buffer)
+            buffer.seek(0)
+            img = base64.b64encode(buffer.read()).decode("utf-8")
+            html_plot = fr"<img src='data:image/png;base64,{img}'>"
     except Exception as e:
         print(e)
         return "Неверные данные для построения графика"
+    finally:
+        plt.close(fig)
 
-    fig.tight_layout()
-    return html_graph
+    return html_plot
         
-@analysis_bp.route("/analysis", methods=["GET", "POST"])
+@analysis_bp.route("/analysis/plots", methods=["GET", "POST"])
 @helpers.session_required
-def analysis_page():
+def plots_page():
     if request.headers.get("HX-Request") and request.method == "POST":
-        plot_params_request = {
-            "linear": "universal params request",
-            "bar": "bar params request",
-            "scatter": "scatter params request",
-            "hist": "hist params request",
-            "box": "universal params request",
-            "heat": "heat params request"
-        }
-
         session_dataset_id = session.get("session_dataset_id", None)
         if session_dataset_id is None:
             return no_dataset_message
@@ -64,8 +68,61 @@ def analysis_page():
             return no_dataset_message
 
         plot_type = request.headers.get("HX-Trigger")
+        html_type = plot_type
+        if plot_type in ("linear", "box"):
+            html_type = "universal"
 
-        return render_template("analysis/" + plot_params_request[plot_type] + ".html", cols=session_dataset.columns, plot_type=plot_type)
+        return render_template("analysis/plots/" + html_type + ".html", cols=session_dataset.columns, plot_type=plot_type)
+
+    return render_template("analysis/plots/plots.html")
+
+@analysis_bp.route("/analysis/groupby", methods=["GET", "POST"])
+@helpers.session_required
+def gropby_page():
+    if request.headers.get("HX-Request") and request.method == "POST":
+        session_dataset_id = session.get("session_dataset_id", None)
+        if session_dataset_id is None:
+            return no_dataset_message
+        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+        if session_dataset is None:
+            return no_dataset_message
+
+        params = request.form.to_dict()
+        groupby = session_dataset.groupby(params["group_col"])[[params["target_col"]]].agg(params["aggfunc"])
+        groupby_html = df_utils.get_correct_df_html(dataset=groupby, min_idxs=0)
+
+        return groupby_html
+    
+@analysis_bp.route("/analysis/pivottable", methods=["GET", "POST"])
+@helpers.session_required
+def pivottable_page():
+    if request.headers.get("HX-Request") and request.method == "POST":
+        session_dataset_id = session.get("session_dataset_id", None)
+        if session_dataset_id is None:
+            return no_dataset_message
+        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+        if session_dataset is None:
+            return no_dataset_message
+
+        params = request.form.to_dict()
+        pivottable = session_dataset.pivot_table(**params)
+        pivottable_html = df_utils.get_correct_df_html(dataset=pivottable, min_idxs=0)
+
+        return pivottable_html
+
+@analysis_bp.route("/analysis", methods=["GET", "POST"])
+@helpers.session_required
+def analysis_page():
+    if request.headers.get("HX-Request") and request.method == "POST":
+        session_dataset_id = session.get("session_dataset_id", None)
+        if session_dataset_id is None:
+            return no_dataset_message
+        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+        if session_dataset is None:
+            return no_dataset_message
+        redirect_to = request.headers.get("HX-Trigger")
+
+        return render_template("/analysis/" + redirect_to + ".html", cols=session_dataset.columns)
 
     df_html = df_utils.show_session_df_html()
     return render_template("analysis/analysis.html", username=session["username"], df_html=df_html)

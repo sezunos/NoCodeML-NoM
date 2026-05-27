@@ -1,0 +1,45 @@
+<main>
+    <form>
+        <p>
+            <label for="index">Строки</label>
+            <select id="groupers" name="index">
+                {% include "cols options.html" %}
+            </select>
+        </p>
+
+        <p>
+            <label for="columns">Столбцы</label>
+            <select id="columns" name="columns">
+                {% include "cols options.html" %}
+            </select>
+        </p>
+
+        <p>
+            <label for="values">Значения</label>
+            <select id="values" name="values">
+                {% include "cols options.html" %}
+            </select>
+        </p>
+
+        <p>
+            <label for="aggfuncs">Найти</label>
+            <select id="aggfuncs" name="aggfunc">
+                <option value="mean">Среднее</option>
+                <option value="median">Медиана</option>
+                <option value="max">Максимальное</option>
+                <option value="min">Минимальное</option>
+                <option value="sum">Сумма</option>
+                <option value="count">Количество</option>
+                <option value="nunique">Количество уникальных</option>
+            </select>
+        </p>
+
+        <p>
+            <button type="submit" hx-post="/analysis/pivottable" hx-target="#message">Создать сводную таблицу</button>
+        </p>
+
+        <p id="message"></p>
+    </form>
+
+    {{ df_html | safe }}
+</main>

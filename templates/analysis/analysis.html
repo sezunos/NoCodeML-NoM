@@ -11,19 +11,14 @@
         <main>
             <form>
                 <p>
-                    <button id="linear" hx-post="/analysis" hx-target="#args">Линейная диаграмма</button>
-                    <button id="bar" hx-post="/analysis" hx-target="#args">Столбчатая диаграмма</button>
-                    <button id="scatter" hx-post="/analysis" hx-target="#args">Диаграмма рассеяния</button>
+                    <button id="groupby/groupby" hx-post="/analysis" hx-target="#content">Сгруппировать данные</button>
+                    <button id="plots/plots" hx-post="/analysis" hx-target="#content">Создать график</button>
+                    <button id="pivottable/pivottable" hx-post="/analysis" hx-target="#content">Создать сводную таблицу</button>
                 </p>
 
-                <p>
-                    <button id="hist" hx-post="/analysis" hx-target="#args">Гистограмма</button>
-                    <button id="box" hx-post="/analysis" hx-target="#args">Диаграмма размаха</button>
-                    <button id="heat" hx-post="/analysis" hx-target="#args">Тепловая диаграмма</button>
-                </p>
+                <br>
+                <p id="content"></p>
             </form>
-
-            <div id="args"></div>
 
             {{ df_html | safe }}
         </main>
