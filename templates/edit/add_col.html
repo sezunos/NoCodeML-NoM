@@ -1,18 +1,18 @@
 <form>
     <p>
-        <label for="nc_name">Введите название нового столбца</label>
-        <input id="nc_name" name="name" type="text" required>
+        <label for="nc_name">Название нового столбца</label>
+        <input id="nc_name" name="name" type="text" placeholder="Введите название" required>
     </p>
 
     <p>
-        <label for="col1">Выберите столбец №1</label>
+        <label for="col1">Столбец №1</label>
         <select id="col1" name="col1" required>
             {% include "cols_options.html" %}
         </select>
     </p>
 
     <p>
-        <label for="elwisefunc_name">Выберите операцию</label>
+        <label for="elwisefunc_name">Операция</label>
         <select id="elwisefunc_name" name="elwisefunc_name" required>
             <option value="+">+</option>
             <option value="-">-</option>
@@ -20,9 +20,9 @@
             <option value="/">/</option>
         </select>
     </p>
-    
+
     <p>
-        <label for="col2">Выберите столбец №2</label>
+        <label for="col2">Столбец №2</label>
         <select id="col2" name="col2" required>
             {% include "cols_options.html" %}
         </select>

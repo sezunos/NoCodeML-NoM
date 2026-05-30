@@ -3,6 +3,7 @@
     <head>
         <title>NoM: Upload Data</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
@@ -11,10 +12,14 @@
         <main>
             <form>
                 <p>
-                    <label for="file">Загрузить данные <br>(формат .csv)<br></label>
-                    <input type="file" name="file" id="file" required hx-post="/upload" hx-trigger="change" hx-encoding="multipart/form-data" hx-target="#message">
+                    <label for="file">Загрузить данные (формат .csv)</label>
+                    <input type="file" name="file" id="file" required
+                        hx-post="/upload"
+                        hx-trigger="change"
+                        hx-encoding="multipart/form-data"
+                        hx-target="#message">
                 </p>
-                <p id="message"> {{ df_html | safe}} </p>
+                <p id="message">{{ df_html | safe }}</p>
             </form>
         </main>
     </body>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>NoM: FAQ</title>
+        <title>NoM: Обратная связь</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
@@ -12,14 +13,12 @@
             <form>
                 <p>
                     <label for="mail">Почта для обратной связи</label>
-                    <br>
-                    <input type="email" id="mail" name="mail" placeholder="Почта">
+                    <input type="email" id="mail" name="mail" placeholder="example@mail.com">
                 </p>
 
                 <p>
                     <label for="feedback">Обратная связь</label>
-                    <br>
-                    <textarea id="feedback" name="feedback" placeholder="Ваша обратная связь" rows="20" cols="50"></textarea>
+                    <textarea id="feedback" name="feedback" placeholder="Ваша обратная связь" rows="10"></textarea>
                 </p>
 
                 <p>

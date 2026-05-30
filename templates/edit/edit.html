@@ -3,6 +3,7 @@
     <head>
         <title>NoM: Edit Data</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
@@ -17,14 +18,14 @@
                 </p>
 
                 <p>
-                    <button id="na_work" hx-post="/edit" hx-target="#args">Работа с пропусками(NA)</button>
+                    <button id="na_work" hx-post="/edit" hx-target="#args">Работа с пропусками (NA)</button>
                     <button id="cut" hx-post="/edit" hx-target="#args">Обрезать данные</button>
                 </p>
 
                 <p id="args"></p>
             </form>
 
-            <p>{{ df_html | safe}}</p>
+            <p>{{ df_html | safe }}</p>
         </main>
     </body>
 </html>

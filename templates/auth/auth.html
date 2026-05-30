@@ -3,31 +3,36 @@
     <head>
         <title>NoM: Authentification</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
-        <form hx-post="/auth" hx-target="#error-message">
-            <legend>Введите логин и пароль для входа</legend>
+        <div class="auth-wrapper">
+            <div class="auth-box">
+                <form hx-post="/auth" hx-target="#error-message">
+                    <legend>Введите логин и пароль для входа</legend>
 
-            <p>
-                <label for="username">Логин: </label>
-                <input type="text" id="username" name="username" required>
-            </p>
+                    <p>
+                        <label for="username">Логин</label>
+                        <input type="text" id="username" name="username" placeholder="Ваш логин" required>
+                    </p>
 
-            <p>
-                <label for="password">Пароль: </label>
-                <input type="password" id="password" name="password" required>
-            </p>
+                    <p>
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" placeholder="Ваш пароль" required>
+                    </p>
 
-            <p>
-                <button type="submit">Войти</button>
-            </p>
+                    <p>
+                        <button type="submit">Войти</button>
+                    </p>
 
-            <p id="error-message"></p>
-        </form>
+                    <p id="error-message"></p>
+                </form>
 
-        <p>
-            <a href="/registration">Зарегистрироваться, если нет аккаунта</a>
-        </p>
+                <p class="auth-footer">
+                    <a href="/registration">Зарегистрироваться, если нет аккаунта</a>
+                </p>
+            </div>
+        </div>
     </body>
 </html>

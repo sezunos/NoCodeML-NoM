@@ -1,13 +1,13 @@
 <form>
     <p>
-        <label for="col_select">Выберите столбец для просмотра пропусков</label>
+        <label for="col_select">Столбец для работы с пропусками</label>
         <select id="col_select" name="col" required>
             {% include "cols_options.html" %}
         </select>
     </p>
 
     <p>
-        <label for="na_work_select">Выберите действие для пропусков</label>
+        <label for="na_work_select">Действие для пропусков</label>
         <select id="na_work_select" name="na_work_type" required>
             <option value="drop">Удалить строки с пропуском</option>
             <option value="mean">Заполнить средним</option>

@@ -1,0 +1,418 @@
+/* ─────────────────────────────────────────────
+   NoM — Cloudy Theme
+   Palette: misty slate, soft periwinkle, cloud white
+   ───────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Variables ── */
+:root {
+  --sky-0:   #f0f4fa;   /* near-white sky */
+  --sky-1:   #dde6f5;   /* lightest cloud */
+  --sky-2:   #c4d4ec;   /* soft blue-grey */
+  --sky-3:   #8fabd4;   /* mid cloud blue */
+  --sky-4:   #5a7fb5;   /* deeper blue */
+  --sky-5:   #3a5f96;   /* accent / primary */
+  --fog:     #e8eef8;   /* card backgrounds */
+  --mist:    #f5f8fd;   /* page background */
+
+  --text-dark:   #1e2c45;
+  --text-mid:    #3d5275;
+  --text-light:  #6b84a8;
+  --text-faint:  #9fb3cc;
+
+  --border:      #ccd9ee;
+  --shadow-sm:   0 2px 8px rgba(90,127,181,.10);
+  --shadow-md:   0 4px 20px rgba(58, 95, 150, .13);
+  --shadow-lg:   0 8px 32px rgba(58, 95, 150, .16);
+
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+
+  --font-display: 'Nunito', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --transition: .18s ease;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--mist);
+  color: var(--text-dark);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(196,212,236,.45) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(143,171,212,.30) 0%, transparent 55%);
+}
+
+/* ── Typography ── */
+h1, h2, h3, legend {
+  font-family: var(--font-display);
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+label {
+  display: block;
+  font-size: .84rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  margin-bottom: .35rem;
+  letter-spacing: .02em;
+}
+
+a {
+  color: var(--sky-5);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+a:hover { color: var(--sky-4); text-decoration: underline; }
+
+/* ── Header / Nav ── */
+header {
+  background: rgba(240,244,250,.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding: .7rem 1.4rem;
+  align-items: center;
+}
+
+header nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .42rem .9rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+header nav button img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header nav button:hover {
+  background: var(--sky-1);
+  border-color: var(--border);
+  color: var(--sky-5);
+  box-shadow: var(--shadow-sm);
+}
+
+header nav button#account {
+  margin-left: auto;
+  background: var(--sky-1);
+  border-color: var(--border);
+}
+
+/* ── Main layout ── */
+main {
+  max-width: 960px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem 4rem;
+}
+
+/* ── Cards ── */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Forms ── */
+form {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.2rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+form p {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding: .6rem 0;
+}
+
+/* inline elements inside a <p> (e.g. range + outputs) */
+form p.inline-row {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+
+/* ── Inputs, Selects, Textareas ── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: .6rem .85rem;
+  background: var(--mist);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: .9rem;
+  color: var(--text-dark);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b84a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .8rem center;
+  padding-right: 2.2rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--sky-3);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(143,171,212,.22);
+}
+
+input[type="file"] {
+  padding: .5rem;
+  background: var(--fog);
+  border: 1.5px dashed var(--sky-3);
+  border-radius: var(--radius-sm);
+  color: var(--text-mid);
+  cursor: pointer;
+  font-size: .85rem;
+}
+input[type="file"]:hover { border-color: var(--sky-4); background: var(--sky-1); }
+
+textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+/* ── Range slider ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 180px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--sky-2);
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--sky-5);
+  border: 2px solid white;
+  box-shadow: var(--shadow-sm);
+}
+input[type="range"]:focus { box-shadow: 0 0 0 3px rgba(143,171,212,.22); }
+
+output {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--sky-5);
+  background: var(--sky-1);
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  font-size: .85rem;
+}
+
+/* ── Buttons ── */
+button {
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+/* Default action button */
+button[hx-post] {
+  padding: .55rem 1.3rem;
+  background: var(--sky-4);
+  color: white;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(90,127,181,.25);
+}
+button[hx-post]:hover {
+  background: var(--sky-5);
+  box-shadow: 0 4px 14px rgba(58,95,150,.32);
+  transform: translateY(-1px);
+}
+button[hx-post]:active { transform: translateY(0); }
+
+/* Secondary / nav buttons inside forms (the toolbar row) */
+form > p > button[hx-post] {
+  padding: .48rem 1.1rem;
+  background: var(--fog);
+  color: var(--text-mid);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  box-shadow: none;
+}
+form > p > button[hx-post]:hover {
+  background: var(--sky-1);
+  color: var(--sky-5);
+  border-color: var(--sky-3);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+/* ── Auth / Registration pages ── */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-box {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2.6rem 3rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-box legend {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  display: block;
+  border-bottom: 1.5px solid var(--sky-1);
+  padding-bottom: .8rem;
+}
+
+.auth-box p { padding: .55rem 0; }
+
+.auth-box button[type="submit"] {
+  width: 100%;
+  padding: .7rem 1rem;
+  background: var(--sky-5);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: .95rem;
+  font-weight: 600;
+  box-shadow: 0 3px 12px rgba(58,95,150,.30);
+  margin-top: .3rem;
+}
+.auth-box button[type="submit"]:hover {
+  background: var(--sky-4);
+  box-shadow: 0 5px 18px rgba(58,95,150,.38);
+  transform: translateY(-1px);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: .85rem;
+  color: var(--text-light);
+}
+
+/* ── Error / message areas ── */
+#error-message, #message, [id$="-message"] {
+  min-height: 1.4rem;
+  font-size: .84rem;
+  color: var(--sky-5);
+  padding: .2rem 0;
+}
+
+/* ── DataFrames (table output) ── */
+main table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+  background: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-top: 1.8rem;
+  border: 1px solid var(--border);
+}
+
+main table thead tr {
+  background: var(--sky-1);
+}
+
+main table th {
+  padding: .65rem .9rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--sky-5);
+  border-bottom: 1.5px solid var(--border);
+  text-align: left;
+}
+
+main table td {
+  padding: .55rem .9rem;
+  border-bottom: 1px solid var(--sky-0);
+  color: var(--text-mid);
+}
+
+main table tbody tr:last-child td { border-bottom: none; }
+main table tbody tr:hover { background: var(--sky-0); }
+
+/* ── Plot placeholder ── */
+#plot-place, #content, #args {
+  margin-top: 1rem;
+}
+
+/* ── Dividers / spacing helpers ── */
+.section-divider {
+  border: none;
+  border-top: 1.5px solid var(--sky-1);
+  margin: 1.2rem 0;
+}
+
+/* ── Scroll bar ── */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: var(--sky-0); }
+::-webkit-scrollbar-thumb { background: var(--sky-2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--sky-3); }

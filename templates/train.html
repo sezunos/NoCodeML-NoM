@@ -3,6 +3,7 @@
     <head>
         <title>NoM: Train Model</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
@@ -13,15 +14,15 @@
                 <form>
                     <p>
                         <label for="model_name">Название модели</label>
-                        <input type="text" name="model_name" id="model_name">
+                        <input type="text" name="model_name" id="model_name" placeholder="Введите название">
                     </p>
 
                     <p>
                         <label for="model_description">Описание модели</label>
-                        <textarea name="model_description" id="model_description" rows="20" cols="50"></textarea>
+                        <textarea name="model_description" id="model_description" rows="5" placeholder="Краткое описание..."></textarea>
                     </p>
 
-                    <p>
+                    <p class="inline-row">
                         <label for="train_test_percent">Разбиение данных</label>
                         <output id="left">50</output>% для тренировки
                         <input type="range" id="train_test_percent" name="train_test_percent"
@@ -31,14 +32,14 @@
                     </p>
 
                     <p>
-                        <label for="target_col">Выберите целевой столбец</label>
+                        <label for="target_col">Целевой столбец</label>
                         <select name="target_col" id="target_col">
                             {% include "cols_options.html" %}
                         </select>
                     </p>
 
                     <p>
-                        <label for="text_work">Выберите способ обработки текстовых данных</label>
+                        <label for="text_work">Обработка текстовых данных</label>
                         <select name="text_work" id="text_work">
                             <option value="auto">Автоматически</option>
                             <option value="OHE">OneHotEncoder</option>
@@ -48,7 +49,7 @@
                     </p>
 
                     <p>
-                        <label for="scaler">Выберите способ масштабирования данных</label>
+                        <label for="scaler">Масштабирование данных</label>
                         <select name="scaler" id="scaler">
                             <option value="auto">Автоматически</option>
                             <option value="Standard">Standard</option>
@@ -58,7 +59,7 @@
                     </p>
 
                     <p>
-                        <label for="model_type">Выберите тип модели</label>
+                        <label for="model_type">Тип модели</label>
                         <select name="model_type" id="model_type">
                             <option value="auto">Автоматически</option>
                             <optgroup label="Классификация">
@@ -66,7 +67,6 @@
                                 <option value="RandForClas">Случайный лес</option>
                                 <option value="LGBMClas">Градиентный бустинг</option>
                             </optgroup>
-
                             <optgroup label="Регрессия">
                                 <option value="LinReg">Линейная регрессия</option>
                                 <option value="RandForReg">Случайный лес</option>

@@ -3,31 +3,36 @@
     <head>
         <title>NoM: Registration</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
-        <form hx-post="/registration" hx-target="#error-message">
-            <legend>Введите данные для регистрации</legend>
-            
-            <p>
-                <label for="username">Логин</label>
-                <input type="text" id="username" name="username" required>
-            </p>
+        <div class="auth-wrapper">
+            <div class="auth-box">
+                <form hx-post="/registration" hx-target="#error-message">
+                    <legend>Введите данные для регистрации</legend>
 
-            <p>
-                <label for="password">Пароль</label>
-                <input type="password" id="password" name="password" minlength="5" required>
-            </p>
+                    <p>
+                        <label for="username">Логин</label>
+                        <input type="text" id="username" name="username" placeholder="Придумайте логин" required>
+                    </p>
 
-            <p>
-                <button type="submit">Зарегистрироваться</button>
-            </p>
+                    <p>
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" placeholder="Минимум 5 символов" minlength="5" required>
+                    </p>
 
-            <p id="error-message"></p>
-        </form>
+                    <p>
+                        <button type="submit">Зарегистрироваться</button>
+                    </p>
 
-        <p>
-            <a href="/auth">Войти в уже существующий аккаунт</a>
-        </p>
+                    <p id="error-message"></p>
+                </form>
+
+                <p class="auth-footer">
+                    <a href="/auth">Войти в уже существующий аккаунт</a>
+                </p>
+            </div>
+        </div>
     </body>
 </html>
