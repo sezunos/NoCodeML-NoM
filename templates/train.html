@@ -9,50 +9,80 @@
         {% include "header.html" %}
 
         <main>
-            <form>
-                <p>
-                    <label for="model_name">Введите название модели</label>
-                    <input type="text" name="model_name" id="model_name">
-                </p>
+            {% if not child_of_trash_architecture %}
+                <form>
+                    <p>
+                        <label for="model_name">Название модели</label>
+                        <input type="text" name="model_name" id="model_name">
+                    </p>
 
-                <p>
-                    <label for="target_col">Выберите целевой столбец</label>
-                    <select name="target_col" id="target_col">
-                        {% include "cols options.html" %}
-                    </select>
-                </p>
+                    <p>
+                        <label for="model_description">Описание модели</label>
+                        <textarea name="model_description" id="model_description" rows="20" cols="50"></textarea>
+                    </p>
 
-                <p>
-                    <label for="text_work">Выберите способ обработки текстовых данных</label>
-                    <select name="text_work" id="text_work">
-                        <option value="auto">Автоматически</option>
-                        <option value="OHE">OneHotEncoder</option>
-                        <option value="CntVec">CountVectorizer</option>
-                        <option value="TFDV">TfidfVectorizer</option>
-                    </select>
-                </p>
+                    <p>
+                        <label for="train_test_percent">Разбиение данных</label>
+                        <output id="left">50</output>% для тренировки
+                        <input type="range" id="train_test_percent" name="train_test_percent"
+                            min="10" max="90" value="50"
+                            oninput="left.value = this.value; right.value = 100 - this.value">
+                        <output id="right">50</output>% для теста
+                    </p>
 
-                <p>
-                    <label for="scaler">Выберите способ масштабирования данных</label>
-                    <select name="scaler" id="scaler">
-                        <option value="auto">Автоматически</option>
-                        <option value="Standard">Standard</option>
-                        <option value="MinMax">MinMax</option>
-                        <option value="Robust">Robust</option>
-                    </select>
-                </p>
+                    <p>
+                        <label for="target_col">Выберите целевой столбец</label>
+                        <select name="target_col" id="target_col">
+                            {% include "cols_options.html" %}
+                        </select>
+                    </p>
 
-                <p>
-                    <label for="model_type">Выберите тип модели</label>
-                    <select name="model_type" id="model_type">
-                        <option value="LinReg">Линейная регрессия</option>
-                        <option value="LogReg">Лоистическая регрессия</option>
-                        <option value="RandFor">Случайный лес</option>
-                        <option value="LGMB">Градиентный бустинг</option>
-                    </select>
-                </p>
-            </form>
-            
+                    <p>
+                        <label for="text_work">Выберите способ обработки текстовых данных</label>
+                        <select name="text_work" id="text_work">
+                            <option value="auto">Автоматически</option>
+                            <option value="OHE">OneHotEncoder</option>
+                            <option value="CntVec">CountVectorizer</option>
+                            <option value="TFIDF">TfidfVectorizer</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="scaler">Выберите способ масштабирования данных</label>
+                        <select name="scaler" id="scaler">
+                            <option value="auto">Автоматически</option>
+                            <option value="Standard">Standard</option>
+                            <option value="MinMax">MinMax</option>
+                            <option value="Robust">Robust</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="model_type">Выберите тип модели</label>
+                        <select name="model_type" id="model_type">
+                            <option value="auto">Автоматически</option>
+                            <optgroup label="Классификация">
+                                <option value="LogReg">Логистическая регрессия</option>
+                                <option value="RandForClas">Случайный лес</option>
+                                <option value="LGBMClas">Градиентный бустинг</option>
+                            </optgroup>
+
+                            <optgroup label="Регрессия">
+                                <option value="LinReg">Линейная регрессия</option>
+                                <option value="RandForReg">Случайный лес</option>
+                                <option value="LGBMReg">Градиентный бустинг</option>
+                            </optgroup>
+                        </select>
+                    </p>
+
+                    <p>
+                        <button hx-post="/train" hx-target="#message">Создать модель</button>
+                    </p>
+
+                    <p id="message"></p>
+                </form>
+            {% endif %}
+
             {{ df_html | safe }}
         </main>
     </body>

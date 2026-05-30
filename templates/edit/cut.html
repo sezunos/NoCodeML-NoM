@@ -2,27 +2,27 @@
     <p>
         <label for="col_select">Выберите столбец для наложения маски</label>
         <select id="col_select" name="col" required>
-            {% include "cols options.html" %}
+            {% include "cols_options.html" %}
         </select>
     </p>
 
     <p>
         <label for="na_work_select">Введите минимум интервала(включительно)</label>
-        <input type="text" name="min">
+        <input type="number" name="min">
     </p>
 
     <p>
         <label for="na_work_select">Введите максимум интервала(включительно)</label>
-        <input type="text" name="max">
+        <input type="number" name="max">
     </p>
 
     <p>
-        <label for="where">Удалить значения</label>
-        <select id="where" name="where">
+        <label for="where_remove">Удалить значения</label>
+        <select id="where_remove" name="where_remove">
             <option value="inner">внутри</option>
             <option value="outer">вне</option>
         </select>
-        <label for="where">интервала</label>
+        <label for="where_remove">интервала</label>
     </p>
 
     <p>

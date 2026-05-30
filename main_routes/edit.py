@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, session, request
-from utils import helpers, df_utils
-from utils.lru_session_datasets import lru_session_datasets
+import os
+
 import numpy as np
-import time
+from flask import Blueprint, render_template, session, request
+
+from utils import helpers, df_utils, lru_session_datasets
 
 
 edit_bp = Blueprint("edit", __name__)
@@ -12,9 +13,9 @@ no_dataset_message = "Сначала нужно загрузить датасе�
 @edit_bp.route("/edit/cut_add_bad", methods=["POST", "GET"])
 @helpers.session_required
 def cut_add_bad():
-    timestamp = time.time_ns()
+    el_id = os.urandom(3).hex()
     add_bad = f"""
-        <input type="text" name="element_{timestamp}" placeholder="Введите значение элемента" required>
+        <input type="text" name="element_{el_id}" placeholder="Введите значение элемента" required>
     """
     return add_bad
 
@@ -53,30 +54,42 @@ def upd_col(dataset, col: str, elwisefunc_name, **kwargs):
 
     return dataset
 
-def na_work(dataset, col: str, action_type: str, **kwargs):
+def na_work(dataset, col: str, na_work_type: str, **kwargs):
     aggfuncs = {
         "mean": np.nanmean,
         "median": np.nanmedian,
     }
-    if action_type == "drop":
+    if na_work_type == "drop":
         dataset = dataset.dropna(subset=[col])
-    elif action_type == "ffill":
+    elif na_work_type == "ffill":
         dataset[col] = dataset[col].ffill()
-    elif action_type == "bfill":
+    elif na_work_type == "bfill":
         dataset[col] = dataset[col].bfill()
     else:
-        dataset[col] = dataset[col].fillna(aggfuncs[action_type](dataset[col]))
+        dataset[col] = dataset[col].fillna(aggfuncs[na_work_type](dataset[col]))
 
     return dataset
 
-def cut(dataset, col: str, min: int, max: int, where: str, bads: list, **kwargs):
+def cut(dataset, col: str, min: int, max: int, where_remove: str, bads: list, **kwargs):
+    def to_dtype(value, dtype):
+        try:
+            return np.array(value, dtype=dtype)
+        except:
+            return value
+
+    col_dtype = dataset[col].dtype
+    min = to_dtype(min, col_dtype)
+    max = to_dtype(max, col_dtype)
+    bads = to_dtype(bads, col_dtype)
+
     query = ''
-    if min and max:
-        query = f"({min} <= `{col}` <= {max})"
-        if where == "inner":
+    if (min != '') and (max != ''):
+        query = f"(@min <= `{col}` <= @max)"
+        if where_remove == "inner":
             query = '~' + query
-    if bads:
-        query += ('&' if query else '') + f"(`{col}` not in {bads})"
+    if len(bads) != 0:
+        query += ('&' if query else '') + f"(`{col}` not in @bads)"
+    print(query)
     dataset = dataset.query(query)
 
     return dataset
@@ -84,7 +97,7 @@ def cut(dataset, col: str, min: int, max: int, where: str, bads: list, **kwargs)
 @edit_bp.route("/edit/<string:action_type>", methods=["GET", "POST"])
 @helpers.session_required
 def do_action(action_type):
-    if request.headers.get("HX-Request") and request.method == "POST":
+    if helpers.is_htmx_req():
         actions = {
             "add_col": add_col,
             "del_col": del_col,
@@ -94,8 +107,6 @@ def do_action(action_type):
         }
 
         session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
         session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
         if session_dataset is None:
             return no_dataset_message
@@ -106,22 +117,23 @@ def do_action(action_type):
             if "element" in key:
                 params["bads"].append(param)
 
-        session_dataset = actions[action_type](session_dataset, **params)
-        lru_session_datasets.update_dataset(session_dataset_id, session_dataset)
+        try:
+            session_dataset = actions[action_type](session_dataset, **params)
+            lru_session_datasets.update_dataset(session_dataset_id, session_dataset)
 
-        return helpers.htmx_redirect("/edit")
+            return helpers.htmx_redirect("/edit")
+        except:
+            return "Произошла ошибка"
 
 @edit_bp.route("/edit", methods=["GET", "POST"])
 @helpers.session_required
 def edit_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
-        action_type = request.headers.get("HX-Trigger")
-        session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
-        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    if helpers.is_htmx_req():
+        session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
         if session_dataset is None:
             return no_dataset_message
+        
+        action_type = request.headers.get("HX-Trigger")
         
         return render_template("edit/" + action_type + ".html", cols=session_dataset.columns, action_type=action_type)
     

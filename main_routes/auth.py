@@ -1,9 +1,11 @@
-from flask import render_template, request, Blueprint, session, redirect
-from db import db
-from utils import helpers
 from hashlib import pbkdf2_hmac
 from hmac import compare_digest
 from os import urandom
+
+from flask import render_template, request, Blueprint, session, redirect
+
+from db import db
+from utils import helpers
 
 
 auth_bp = Blueprint("auth", __name__)
@@ -34,8 +36,6 @@ def set_session(user_id: int, username: str):
     session["user_id"] = user_id
     session["username"] = username
 
-#-------ROUTES-------
-
 @auth_bp.route("/")
 @helpers.session_required
 def root_page():
@@ -43,22 +43,22 @@ def root_page():
 
 @auth_bp.route("/auth", methods=["get", "post"])
 def auth_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
+    if helpers.is_htmx_req():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        data = db.get_user_data(username)
-        if not data or not check_password(password, data[2]):
+        fetchone = db.get_user_data(username)
+        if not fetchone or not check_password(password, fetchone[2]):
             return "Неверные данные"
 
-        set_session(data[0], data[1])
+        set_session(fetchone[0], fetchone[1])
         return helpers.htmx_redirect("/account")
 
     return render_template("auth/auth.html")
 
 @auth_bp.route("/registration", methods=["get", "post"])
 def registration_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
+    if helpers.is_htmx_req():
         username = request.form.get("username")
         password = request.form.get("password")
 

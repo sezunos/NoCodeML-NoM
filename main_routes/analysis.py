@@ -1,13 +1,15 @@
+import io
+import base64
+
 from flask import Blueprint, render_template, session, request, send_file
-from utils import helpers, df_utils
-from utils.lru_session_datasets import lru_session_datasets
 import seaborn as sns
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-import io
-import base64
+
+from utils import helpers, df_utils, lru_session_datasets
+
 
 analysis_bp = Blueprint("analysis", __name__)
 
@@ -28,8 +30,7 @@ def analysis_create_plot(plot_type):
         "heat": sns.heatmap
     }
 
-    session_dataset_id = session["session_dataset_id"]
-    session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
     if session_dataset is None:
         return no_dataset_message
         
@@ -48,9 +49,8 @@ def analysis_create_plot(plot_type):
             buffer.seek(0)
             img = base64.b64encode(buffer.read()).decode("utf-8")
             html_plot = fr"<img src='data:image/png;base64,{img}'>"
-    except Exception as e:
-        print(e)
-        return "Неверные данные для построения графика"
+    except:
+        return "Произошла ошибка"
     finally:
         plt.close(fig)
 
@@ -59,11 +59,8 @@ def analysis_create_plot(plot_type):
 @analysis_bp.route("/analysis/plots", methods=["GET", "POST"])
 @helpers.session_required
 def plots_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
-        session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
-        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    if helpers.is_htmx_req():
+        session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
         if session_dataset is None:
             return no_dataset_message
 
@@ -79,47 +76,48 @@ def plots_page():
 @analysis_bp.route("/analysis/groupby", methods=["GET", "POST"])
 @helpers.session_required
 def gropby_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
-        session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
-        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    if helpers.is_htmx_req():
+        session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
         if session_dataset is None:
             return no_dataset_message
 
         params = request.form.to_dict()
-        groupby = session_dataset.groupby(params["group_col"])[[params["target_col"]]].agg(params["aggfunc"])
-        groupby_html = df_utils.get_correct_df_html(dataset=groupby, min_idxs=0)
 
-        return groupby_html
+        try:
+            groupby = session_dataset.groupby(params["group_col"])[[params["target_col"]]].agg(params["aggfunc"])
+            groupby_html = df_utils.get_correct_df_html(dataset=groupby, min_idxs=0)
+
+            return groupby_html
+        except:
+            return "Произошла ошибка"
     
 @analysis_bp.route("/analysis/pivottable", methods=["GET", "POST"])
 @helpers.session_required
 def pivottable_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
-        session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
-        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    if helpers.is_htmx_req():
+        session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
         if session_dataset is None:
             return no_dataset_message
 
         params = request.form.to_dict()
-        pivottable = session_dataset.pivot_table(**params)
-        pivottable_html = df_utils.get_correct_df_html(dataset=pivottable, min_idxs=0)
+        
+        try:
+            pivottable = session_dataset.pivot_table(**params)
+            pivottable_html = df_utils.get_correct_df_html(dataset=pivottable, min_idxs=0)
 
-        return pivottable_html
+            return pivottable_html
+        except Exception as e:
+            print(e)
+            return "Произошла ошибка"
 
 @analysis_bp.route("/analysis", methods=["GET", "POST"])
 @helpers.session_required
 def analysis_page():
-    if request.headers.get("HX-Request") and request.method == "POST":
-        session_dataset_id = session.get("session_dataset_id", None)
-        if session_dataset_id is None:
-            return no_dataset_message
-        session_dataset = lru_session_datasets.get_dataset(session_dataset_id)
+    if helpers.is_htmx_req():
+        session_dataset = lru_session_datasets.get_dataset(session.get("session_dataset_id", None))
         if session_dataset is None:
             return no_dataset_message
+        
         redirect_to = request.headers.get("HX-Trigger")
 
         return render_template("/analysis/" + redirect_to + ".html", cols=session_dataset.columns)

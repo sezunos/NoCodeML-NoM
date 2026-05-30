@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NoM: FAQ</title>
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+
+    <body>
+        {% include "header.html" %}
+
+        <main>
+            <form>
+                <p>
+                    <label for="mail">Почта для обратной связи</label>
+                    <br>
+                    <input type="email" id="mail" name="mail" placeholder="Почта">
+                </p>
+
+                <p>
+                    <label for="feedback">Обратная связь</label>
+                    <br>
+                    <textarea id="feedback" name="feedback" placeholder="Ваша обратная связь" rows="20" cols="50"></textarea>
+                </p>
+
+                <p>
+                    <button hx-post="/feedback">Отправить</button>
+                </p>
+            </form>
+        </main>
+    </body>
+</html>

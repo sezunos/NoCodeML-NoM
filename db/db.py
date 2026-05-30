@@ -1,7 +1,13 @@
 import sqlite3
-from utils.lru_session_datasets import lru_session_datasets
+from pathlib import Path
+import os
+from dotenv import load_dotenv
 
-db_name = r"data/NoM_db.db"
+from utils import lru_session_datasets
+
+
+load_dotenv()
+db_name = str(Path(os.getenv("DATABASE_PATH")))
 
 def _execute(query: str, data: tuple=()):
     with sqlite3.connect(db_name, timeout=30.0) as conn:
@@ -58,8 +64,8 @@ def init_models():
             model_type TEXT NOT NULL,
             train_date INTEGER NOT NULL,
             description TEXT NOT NULL,
-            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-            dataset_id INTEGER REFERENCES linked_datasets(id) ON DELETE CASCADE
+            user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            dataset_id INTEGER REFERENCES linked_datasets(id) ON DELETE SET NULL
         );
     """
 
@@ -125,7 +131,7 @@ def add_session_dataset(name: str, path_to_file: str, time: int):
         (name, path_to_file, last_action_time) VALUES (?, ?, ?)
     """
     fetchall, lastrowid = _execute(query, (name, path_to_file, time))
-    lru_session_datasets._when_create(lastrowid, path_to_file)
+    lru_session_datasets._set_dataset(lastrowid, path_to_file)
 
     return lastrowid
 

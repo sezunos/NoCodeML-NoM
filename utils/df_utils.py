@@ -1,6 +1,6 @@
-from utils.lru_session_datasets import lru_session_datasets
 from flask import session
-import pandas as pd
+
+from utils import lru_session_datasets
 
 
 def expand_idxs_to(df, min_idxs: int):
@@ -11,18 +11,18 @@ def expand_idxs_to(df, min_idxs: int):
     return df.reindex(new_index)
 
 def make_df_html(df):
-    return df.to_html(na_rep="")
+    return df.to_html(na_rep="", escape=False)
 
 def get_correct_df_html(dataset_id: int=None, min_idxs: int=None, max_idxs: int=None, dataset=None, more_button: bool=False):
     if min_idxs is None:
-        min_idxs = 5
+        min_idxs = 1
 
-    df = lru_session_datasets.get_dataset(dataset_id) if dataset_id is not None else dataset
+    df = lru_session_datasets.get_dataset(dataset_id) if dataset is None else dataset
     if df is None:
-        df = pd.DataFrame()
+        return
     df_len = len(df)
 
-    if max_idxs is None:
+    if max_idxs is None or max_idxs > df_len:
         max_idxs = df_len
     df = df.head(max_idxs)
     
@@ -37,12 +37,13 @@ def get_correct_df_html(dataset_id: int=None, min_idxs: int=None, max_idxs: int=
     return html_table
 
 def show_session_df_html():
-    min_idxs = 5
     max_idxs = 10
     df_html = "<p>Нет датасета</p>"
     
     session_dataset_id = session.get("session_dataset_id", None)
-    if session_dataset_id is not None:
-        df_html = "<p>Текущий датасет: </p>" + get_correct_df_html(session_dataset_id, min_idxs, max_idxs, more_button=True)
+    correct_df_html = get_correct_df_html(session_dataset_id, max_idxs=max_idxs, more_button=True)
+
+    if correct_df_html is not None:
+        df_html = "<p>Текущий датасет: </p>" + correct_df_html
 
     return df_html

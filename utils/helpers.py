@@ -1,5 +1,7 @@
-from flask import session, make_response, redirect
 from functools import wraps
+
+from flask import session, make_response, redirect, request
+
 
 def htmx_redirect(to: str):
     redirect_response = make_response("", 200)
@@ -14,3 +16,6 @@ def session_required(func):
         
         return func(*args, **kwargs)
     return wrapper
+
+def is_htmx_req():
+    return request.headers.get("HX-Request") and request.method == "POST"

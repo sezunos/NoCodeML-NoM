@@ -1,9 +1,10 @@
 <header>
     <nav>
-        <button id="upload" hx-post="/navigator"><img src="{{url_for('static', filename='img/upload.png')}}"> Upload Data</button>
-        <button id="edit" hx-post="/navigator"><img src="{{url_for('static', filename='img/edit.png')}}"> Edit Data</button>
+        <button id="upload" hx-post="/navigator"><img src="{{url_for('static', filename='img/upload.png')}}"> Загрузить Датасет</button>
+        <button id="edit" hx-post="/navigator"><img src="{{url_for('static', filename='img/edit.png')}}"> Изменить Датасет</button>
         <button id="analysis" hx-post="/navigator"><img src="{{url_for('static', filename='img/analysis.png')}}"> Data Analysis</button>
-        <button id="train" hx-post="/navigator"><img src="{{url_for('static', filename='img/train.png')}}"> Train Model</button>
+        <button id="train" hx-post="/navigator"><img src="{{url_for('static', filename='img/train.png')}}"> Обучить модель</button>
         <button id="account" hx-post="/navigator"><img src="{{url_for('static', filename= 'avatars/' + username + '.png')}}"> {{username}}</button>
+        <button id="feedback" hx-post="/navigator"><img src="{{url_for('static', filename='img/feedback.png')}}"> Обратная связь</button>
     </nav>
 </header>
