@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>NoM: Train Model</title>
+        <title>NoM: Обучить Модель</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
@@ -76,10 +76,14 @@
                     </p>
 
                     <p>
-                        <button hx-post="/train" hx-target="#message">Создать модель</button>
+                        <button hx-post="/train" hx-target="#message" hx-indicator="#wait">Создать модель</button>
                     </p>
 
-                    <p id="message"></p>
+                    <p id="message">
+                        <span id="wait" class="htmx-indicator">
+                            Пожалуйста, подождите
+                        </span>
+                    </p>
                 </form>
             {% endif %}
 

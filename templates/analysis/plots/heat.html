@@ -1,5 +1,9 @@
 <form>
-    <p hx-post="/analysis/plots/{{plot_type}}" hx-target="#plot-place" hx-trigger="load"></p>
+    <p hx-post="/analysis/plots/{{plot_type}}" hx-target="#plot-place" hx-trigger="load" hx-indicator="#wait"></p>
 
-    <p id="plot-place"></p>
+    <p id="plot-place">
+        <span id="wait" class="htmx-indicator">
+            Пожалуйста, подождите
+        </span>
+    </p>
 </form>

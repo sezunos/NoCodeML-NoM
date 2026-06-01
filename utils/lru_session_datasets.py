@@ -36,6 +36,7 @@ class lru_session_datasets_cls:
         return pd.read_csv(path_to_file)
     
     def _update_dataset_la_time(self, dataset_id: int):
+        if dataset_id not in self.cache: return
         query = """
             UPDATE session_datasets
             SET last_action_time = (?)
@@ -55,11 +56,11 @@ class lru_session_datasets_cls:
         session_dataset = self._get_dataset_from_fs(dataset_id)
         if session_dataset is None:
             return None
+        
+        self._update_dataset_la_time(dataset_id)
 
         if len(self.cache) >= self.max_items:
             self.cache.popitem(last=False)
-        
-        self._update_dataset_la_time(dataset_id)
 
         self.cache[dataset_id] = session_dataset
         return self.cache[dataset_id]

@@ -3,10 +3,10 @@
 <header>
     <nav>
         <button id="upload" hx-post="/navigator"><img src="{{url_for('static', filename='img/upload.svg')}}"> Загрузить Датасет</button>
+        <button id="analysis" hx-post="/navigator"><img src="{{url_for('static', filename='img/analysis.svg')}}"> Анализ Датасета</button>
         <button id="edit" hx-post="/navigator"><img src="{{url_for('static', filename='img/edit.svg')}}"> Изменить Датасет</button>
-        <button id="analysis" hx-post="/navigator"><img src="{{url_for('static', filename='img/analysis.svg')}}"> Data Analysis</button>
         <button id="train" hx-post="/navigator"><img src="{{url_for('static', filename='img/train.svg')}}"> Обучить модель</button>
         <button id="feedback" hx-post="/navigator"><img src="{{url_for('static', filename='img/feedback.svg')}}"> Обратная связь</button>
-        <button id="account" hx-post="/navigator"><img src="{{url_for('static', filename= 'img/user.svg')}}"> {{username}}</button>
+        <button id="account" hx-post="/navigator"><img src="{{url_for('static', filename='img/user.svg')}}"> {{username}}</button>
     </nav>
 </header>

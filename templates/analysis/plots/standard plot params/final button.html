@@ -1,0 +1,9 @@
+<p>
+    <button hx-post="/analysis/plots/{{plot_type}}" hx-target="#plot-place" hx-indicator="#wait">Построить график</button>
+</p>
+
+<p id="plot-place">
+    <span id="wait" class="htmx-indicator">
+        Пожалуйста, подождите
+    </span>
+</p>

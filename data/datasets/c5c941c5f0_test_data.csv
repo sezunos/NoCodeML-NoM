@@ -1,5 +1,0 @@
-id,name,age,city,salary
-1,Alice,25.0,New York,50000.0
-2,Bob,,London,60000.0
-3,,30.0,Paris,
-5,David,35.0,Berlin,70000.0

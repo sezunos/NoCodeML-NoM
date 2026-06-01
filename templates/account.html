@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>NoM: {{username}}'s account</title>
+        <title>NoM: {{username}}</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
 
@@ -9,7 +9,7 @@
         {% include "header.html" %}
 
         <main>
-            <img src="{{url_for('static', filename = 'avatars/' + username + '.png')}}">
+            <img src="{{url_for('static', filename='img/user.svg')}}">
             {{username}}
             <hr>
             <p>

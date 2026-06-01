@@ -3,9 +3,5 @@
     {% include "analysis/plots/standard plot params/request Y param.html" %}
     {% include "analysis/plots/standard plot params/request hue param.html" %}
 
-    <p>
-        <button hx-post="/analysis/plots/{{plot_type}}" hx-target="#plot-place">Построить график</button>
-    </p>
-
-    <p id="plot-place"></p>
+    {% include "analysis/plots/standard plot params/final button.html" %}
 </form>

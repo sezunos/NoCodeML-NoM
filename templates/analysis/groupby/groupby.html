@@ -28,10 +28,14 @@
         </p>
 
         <p>
-            <button type="submit" hx-post="/analysis/groupby" hx-target="#message">Сгруппировать</button>
+            <button type="submit" hx-post="/analysis/groupby" hx-target="#message" hx-indicator="#wait">Сгруппировать</button>
         </p>
 
-        <p id="message"></p>
+        <p id="message">
+            <span id="wait" class="htmx-indicator">
+                Пожалуйста, подождите
+            </span>
+        </p>
     </form>
 
     {{ df_html | safe }}

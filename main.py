@@ -16,7 +16,7 @@ app = Flask(__name__)
 htmx = HTMX(app)
 
 load_dotenv()
-app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_CONTENT_LENGTH"))
 app.config["SECRET_KEY"] = os.getenv("SECRET_SESSION_KEY")
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=15)
 
@@ -31,9 +31,9 @@ app.register_blueprint(feedback.feedback_bp)
 app.register_blueprint(df_utils_add_cols.df_utils_add_cols_bp)
 
 if __name__ == "__main__":
-    sleep_time = 5 * 60
-    kill_time_sd = 30 * 60
-    kill_time_mc = 5 * 60
+    sleep_time = int(os.getenv("GARBAGES_SLEEP_TIME"))
+    kill_time_sd = int(os.getenv("GC_DATASETS_KILL_TIME"))
+    kill_time_mc = int(os.getenv("GC_MODELS_KILL_TIME"))
 
     def garbages(sleep_time, kill_time_sd, kill_time_mc):
         while True:

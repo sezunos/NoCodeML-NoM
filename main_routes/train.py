@@ -235,7 +235,7 @@ def train_page():
                     "R2 score": [r2_score(y_test, y_pred)]
                 }
             
-            path = str(Path.cwd() / "data" / "models" / f"{os.urandom(2).hex()}_{model_name}_{session["username"]}.joblib")
+            path = str(Path.cwd() / "data" / "models" / f"{model_name}_{session["username"]}_{os.urandom(2).hex()}.joblib")
             joblib.dump(pipeline, path)
             db.add_model(model_name, path, session["user_id"], model_param, time.time(), model_description, None)
 
@@ -248,7 +248,8 @@ def train_page():
             """
 
             return report_html + save_button
-        except:
+        except Exception as e:
+            print(e)
             return "Произошла ошибка"
 
     df_html = df_utils.show_session_df_html()

@@ -83,6 +83,7 @@ def gropby_page():
 
         params = request.form.to_dict()
 
+        params = {key: value for key, value in request.form.to_dict().items()}
         try:
             groupby = session_dataset.groupby(params["group_col"])[[params["target_col"]]].agg(params["aggfunc"])
             groupby_html = df_utils.get_correct_df_html(dataset=groupby, min_idxs=0)

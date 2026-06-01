@@ -35,10 +35,14 @@
         </p>
 
         <p>
-            <button type="submit" hx-post="/analysis/pivottable" hx-target="#message">Создать сводную таблицу</button>
+            <button type="submit" hx-post="/analysis/pivottable" hx-target="#message" hx-indicator="#wait">Создать сводную таблицу</button>
         </p>
 
-        <p id="message"></p>
+        <p id="message">
+            <span id="wait" class="htmx-indicator">
+                Пожалуйста, подождите
+            </span>
+        </p>
     </form>
 
     {{ df_html | safe }}

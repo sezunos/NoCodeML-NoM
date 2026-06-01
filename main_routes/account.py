@@ -45,4 +45,4 @@ def account_page():
         min_idxs = 5
         df_html = df_utils.get_correct_df_html(min_idxs=min_idxs, dataset=pd.DataFrame(columns=cols))
 
-    return render_template("account/account.html", id=session["user_id"], username=session["username"], models_count=df_size, models_table_html=df_html)
+    return render_template("account.html", id=session["user_id"], username=session["username"], models_count=df_size, models_table_html=df_html)
