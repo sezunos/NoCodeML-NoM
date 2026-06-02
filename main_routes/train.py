@@ -134,7 +134,7 @@ def train_page():
             FROM models
             WHERE user_id = (?) AND dataset_id IS NULL
         """
-        db._execute(last_temp_model_kill_query, (session["username"],))
+        db._execute(last_temp_model_kill_query, (session["user_id"],))
         
         models = {
             "LogReg": (LogisticRegression, "Clas"),
@@ -235,7 +235,9 @@ def train_page():
                     "R2 score": [r2_score(y_test, y_pred)]
                 }
             
-            path = str(Path.cwd() / "data" / "models" / f"{model_name}_{session["username"]}_{os.urandom(2).hex()}.joblib")
+            path = Path.cwd() / "data" / "models" / f"{model_name}_{session['username']}_{os.urandom(2).hex()}.joblib"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path = str(path)
             joblib.dump(pipeline, path)
             db.add_model(model_name, path, session["user_id"], model_param, time.time(), model_description, None)
 

@@ -6,6 +6,7 @@ from utils import helpers
 
 
 path_to_dir = Path.cwd() / "data" / "feedbacks"
+path_to_dir.parent.mkdir(parents=True, exist_ok=True)
 
 feedback_bp = Blueprint("feedback", __name__)
 

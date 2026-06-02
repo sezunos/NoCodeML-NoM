@@ -13,6 +13,7 @@ from utils import helpers, df_utils
 upload_bp = Blueprint("upload", __name__)
 permitted_mimes = ["text/plain", "text/csv"]
 path_to_dir = Path.cwd() / "data" / "datasets"
+path_to_dir.mkdir(parents=True, exist_ok=True)
 
 @upload_bp.route("/upload", methods=["GET", "POST"])
 @helpers.session_required
@@ -38,7 +39,7 @@ def upload_page():
             session["session_dataset_id"] = session_dataset_id
 
             return helpers.htmx_redirect("/upload")
-        except:
+        except Exception as e:
             return "Произошла ошибка"
 
     df_html = df_utils.show_session_df_html()

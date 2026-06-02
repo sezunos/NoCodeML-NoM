@@ -1,13 +1,13 @@
 import sqlite3
 from pathlib import Path
-import os
 from dotenv import load_dotenv
 
 from utils import lru_session_datasets
 
 
 load_dotenv()
-db_name = str(Path(os.getenv("DATABASE_PATH")))
+db_name = Path.cwd() / "data" / "NoM.db"
+db_name.parent.mkdir(parents=True, exist_ok=True)
 
 def _execute(query: str, data: tuple=()):
     with sqlite3.connect(db_name, timeout=30.0) as conn:
