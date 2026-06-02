@@ -11,6 +11,7 @@ NoM — это мощная и интуитивно понятная платф�
        playsinline 
        style="max-width: 100%;">
 </video>
+Edited by [Var Ing](https://www.youtube.com/@varing/videos)
 
 <h3>🌟 Ключевые особенности</h3>
 
