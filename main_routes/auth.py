@@ -35,6 +35,7 @@ def check_password(candidate_password: str, hash_from_db: bytes):
 def set_session(user_id: int, username: str):
     session["user_id"] = user_id
     session["username"] = username
+    session.permanent = True
 
 @auth_bp.route("/")
 @helpers.session_required

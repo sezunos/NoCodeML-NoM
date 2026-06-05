@@ -1,11 +1,9 @@
 import sqlite3
 from pathlib import Path
-from dotenv import load_dotenv
 
 from utils import lru_session_datasets
 
 
-load_dotenv()
 db_name = Path.cwd() / "data" / "NoM.db"
 db_name.parent.mkdir(parents=True, exist_ok=True)
 
